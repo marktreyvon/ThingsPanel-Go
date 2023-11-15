@@ -56,6 +56,7 @@ func (c *SharedVisualizationController) Get() {
 // 根据可视化id创建对应可视化的分享
 func (c *SharedVisualizationController)GenerateShareId() {
 	var TpDashboardService services.TpDashboardService
+	var TpConsoleService services.ConsoleService
 	var SharedVisualizationService services.SharedVisualizationService
 	GetShareLinkValidate := valid.GetShareLinkValidate{}
 	err := json.Unmarshal(c.Ctx.Input.RequestBody, &GetShareLinkValidate)
@@ -77,23 +78,45 @@ func (c *SharedVisualizationController)GenerateShareId() {
 	}
 	// 生成分享id
 	shareId := utils.GetUuid()
+	deviceListJSON := []byte("[]")
+	// 根据不同的分享类型生成不同的分享信息
+	if GetShareLinkValidate.ShareType == "console" {
+		// 保存分享id到可视化模型中
+		flag := TpConsoleService.UpdateShareId(GetShareLinkValidate.Id, shareId)
+		if !flag {
+			response.SuccessWithMessage(400, "代码逻辑错误", (*context2.Context)(c.Ctx))
+			return
+		}
+		// 获取可视化绑定的设备列表
+		deviceList, err := TpDashboardService.GetDeviceListByVisualizationID(GetShareLinkValidate.Id)
+		deviceListJSON, err := json.Marshal(deviceList)
+		if err != nil {
+			logs.Error("Error marshalling deviceList to JSON:", err)
+			return
+		}
+		// 不存在时deviceListJSON为空数组
+		if string(deviceListJSON) == "null" {
+			deviceListJSON = []byte("[]")
+		}
+	} else {
 
-	// 保存分享id到可视化模型中
-	flag := TpDashboardService.UpdateShareId(GetShareLinkValidate.Id, shareId)
-	if !flag {
-		response.SuccessWithMessage(400, "代码逻辑错误", (*context2.Context)(c.Ctx))
-		return
-	}
-	// 获取可视化绑定的设备列表
-	deviceList, err := TpDashboardService.GetDeviceListByVisualizationID(GetShareLinkValidate.Id)
-	deviceListJSON, err := json.Marshal(deviceList)
-	if err != nil {
-		logs.Error("Error marshalling deviceList to JSON:", err)
-		return
-	}
-	// 不存在时deviceListJSON为空数组
-	if string(deviceListJSON) == "null" {
-		deviceListJSON = []byte("[]")
+		// 保存分享id到可视化模型中
+		flag := TpDashboardService.UpdateShareId(GetShareLinkValidate.Id, shareId)
+		if !flag {
+			response.SuccessWithMessage(400, "代码逻辑错误", (*context2.Context)(c.Ctx))
+			return
+		}
+		// 获取可视化绑定的设备列表
+		deviceList, err := TpDashboardService.GetDeviceListByVisualizationID(GetShareLinkValidate.Id)
+		deviceListJSON, err := json.Marshal(deviceList)
+		if err != nil {
+			logs.Error("Error marshalling deviceList to JSON:", err)
+			return
+		}
+		// 不存在时deviceListJSON为空数组
+		if string(deviceListJSON) == "null" {
+			deviceListJSON = []byte("[]")
+		}
 	}
 
 	// 创建可视化分享模型

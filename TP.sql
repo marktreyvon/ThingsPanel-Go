@@ -2025,3 +2025,12 @@ COMMENT ON COLUMN "public"."tp_data_cleanup_config"."remark" IS '备注';
 
 INSERT INTO "public"."tp_data_cleanup_config" ("id", "cleanup_type", "retention_days", "last_cleanup_time", "last_cleanup_data_time", "remark") VALUES ('a', 1, 30, 0, 0, '');
 INSERT INTO "public"."tp_data_cleanup_config" ("id", "cleanup_type", "retention_days", "last_cleanup_time", "last_cleanup_data_time", "remark") VALUES ('b', 2, 30, 0, 0, '');
+
+
+-- 添加可视化分享列：分享类型
+ALTER TABLE public.shared_visualization ADD share_type varchar NULL;
+COMMENT ON COLUMN public.shared_visualization.share_type IS '分享类型';
+
+-- 添加可视化看板列：分享类型
+ALTER TABLE public.tp_console ADD share_id varchar(36) NULL;
+COMMENT ON COLUMN public.tp_console.share_id IS '分享id';

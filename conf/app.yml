@@ -11,9 +11,15 @@ app:
 db:
   psql:
     dbType: timescaledb
-    psqladdr: "127.0.0.1"
+    # dbType: cassandra
+    # psqladdr: "127.0.0.1"
+    # psqlport: 5432
+    # psqldb: postgres 
+    # psqluser: postgres
+    # psqlpass: postgresThingsPanel2022
+    psqladdr: "39.98.176.26"
     psqlport: 5432
-    psqldb: ThingsPanel
+    psqldb: postgres
     psqluser: postgres
     psqlpass: ThingsPanel2023
     psqlMaxConns: 5 # 空闲连接池中的最大连接数，建议为psqlMaxOpen的百分之5-20之间
@@ -25,11 +31,13 @@ db:
 
   redis:
     # redis 连接字符串
-    conn: 127.0.0.1:6379
+    # conn: 127.0.0.1:6379
+    conn: 39.98.176.26:6379
     # redis 数据库号
     dbNum: 0
     # redis 密码
     password: "redis2022"
+    # password: ""
 
 log:
   # 0-控制台输出 1-文件输出 2-文件和控制台输出
@@ -46,6 +54,7 @@ mqtt_server: gmqtt
 
 mqtt:
   broker: 127.0.0.1:1883
+  # broker: 39.98.176.26:1883
   user: root
   pass: root
   topicToSubscribe: device/attributes  #属性订阅主题

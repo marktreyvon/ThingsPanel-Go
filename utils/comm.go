@@ -245,7 +245,7 @@ func CheckEmail(email string) error {
 	return nil
 }
 
-// 从可视化jsondata中获取绑定的设备id列表
+// 从可视化大屏jsondata中获取绑定的设备id列表
 func GetDeviceListByVisualizationData(inputStr string) ([]string, error) {
 	var result map[string]interface{}
 	deviceIds := make(map[string]bool)
@@ -310,6 +310,74 @@ func GetDeviceListByVisualizationData(inputStr string) ([]string, error) {
 	}
 
 	return uniqueDeviceIds, nil
+}
+
+// 从可视化看板data中获取绑定的设备id列表
+func GetDeviceListByConsoleData(inputStr string) ([]string, error) {
+	return []string{}, nil
+	// var result map[string]interface{}
+	// deviceIds := make(map[string]bool)
+	// var uniqueDeviceIds []string
+	// err := json.Unmarshal([]byte(inputStr), &result)
+	// if err != nil {
+	// 	fmt.Println("Error unmarshalling main JSON:", err)
+	// 	return uniqueDeviceIds, err
+	// }
+
+	// cells, ok := result["cells"].([]interface{})
+	// if !ok {
+	// 	return uniqueDeviceIds, errors.New("cells not found")
+	// }
+	// for _, item := range cells {
+	// 	cell, ok := item.(map[string]interface{})
+	// 	if !ok {
+	// 		continue
+	// 	}
+
+	// 	data, ok := cell["data"].(map[string]interface{})
+	// 	if !ok {
+	// 		continue
+	// 	}
+
+	// 	jsonData, ok := data["jsonData"].(string)
+	// 	if !ok {
+	// 		continue
+	// 	}
+
+	// 	var jsonDataContent map[string]interface{}
+	// 	err := json.Unmarshal([]byte(jsonData), &jsonDataContent)
+	// 	if err != nil {
+	// 		continue
+	// 	}
+
+	// 	dataContent, ok := jsonDataContent["data"].(map[string]interface{})
+	// 	if !ok {
+	// 		continue
+	// 	}
+
+	// 	deviceDataList, ok := dataContent["deviceData"].([]interface{})
+	// 	if !ok {
+	// 		continue
+	// 	}
+
+	// 	for _, deviceDataItem := range deviceDataList {
+	// 		deviceData, ok := deviceDataItem.(map[string]interface{})
+	// 		if !ok {
+	// 			continue
+	// 		}
+
+	// 		deviceID, ok := deviceData["deviceId"].(string)
+	// 		if ok && deviceID != "" {
+	// 			deviceIds[deviceID] = true
+	// 		}
+	// 	}
+	// }
+
+	// for key := range deviceIds {
+	// 	uniqueDeviceIds = append(uniqueDeviceIds, key)
+	// }
+
+	// return uniqueDeviceIds, nil
 }
 
 func IsToday(ts int64) bool {
